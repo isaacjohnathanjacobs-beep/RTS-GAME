@@ -25,8 +25,37 @@ A complete real-time strategy game built with Three.js, featuring animated 3D ch
 ## How to Play
 
 ### Starting the Game
-1. Open `index.html` in a modern web browser (Chrome, Firefox, Edge recommended)
-2. Wait for all assets to load
+
+**Important**: Due to browser security (CORS), you need to run a local web server. Choose one of these methods:
+
+#### Method 1: Use the Launcher Scripts (Easiest)
+- **Windows**: Double-click `start-server.bat`
+- **Mac/Linux**: Run `./start-server.sh` or `bash start-server.sh`
+- Then open http://localhost:8000 in your browser
+
+#### Method 2: Python (if installed)
+```bash
+# Python 3
+python -m http.server 8000
+
+# Python 2
+python -m SimpleHTTPServer 8000
+```
+Then open http://localhost:8000
+
+#### Method 3: Node.js (if installed)
+```bash
+npx http-server -p 8000
+```
+Then open http://localhost:8000
+
+#### Method 4: VS Code
+- Install "Live Server" extension
+- Right-click `index.html` → "Open with Live Server"
+
+Once the server is running:
+1. Open the URL in your browser (usually http://localhost:8000)
+2. Wait for all assets to load (FBX models and animations)
 3. Start with a Town Hall and 3 workers
 
 ### Controls
@@ -175,9 +204,14 @@ Requires WebGL 2.0 support.
 
 ## Quick Start
 
-Simply open `index.html` in your browser to start playing!
+**Easiest method**:
+1. Double-click `start-server.bat` (Windows) or run `./start-server.sh` (Mac/Linux)
+2. Open http://localhost:8000 in your browser
+3. Wait for assets to load and start playing!
 
-No build process or server required - runs entirely in the browser.
+**Alternative**: Use Python, Node.js, or VS Code Live Server (see "Starting the Game" section above)
+
+No build process required - runs entirely in the browser once served!
 
 ---
 
