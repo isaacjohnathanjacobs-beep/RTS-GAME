@@ -1,5 +1,9 @@
 import { Game } from './core/Game.js';
 
+// VERSION CHECK - You should see this in console
+console.log('%c🎮 RTS GAME v2.0 - GEOMETRIC SHAPES VERSION 🎮', 'color: #00ff00; font-size: 20px; font-weight: bold;');
+console.log('%cIf you see this, you have the NEW version!', 'color: #ffff00; font-size: 14px;');
+
 // Main entry point
 async function main() {
     console.log('RTS Game loaded - waiting for user to start...');
