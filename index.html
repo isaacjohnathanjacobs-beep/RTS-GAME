@@ -325,6 +325,41 @@
             margin: 8px 0;
             line-height: 1.6;
         }
+
+        /* AI Selector */
+        .ai-selector {
+            margin-bottom: 30px;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .ai-selector label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .ai-select {
+            width: 100%;
+            padding: 10px 15px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .ai-select:hover {
+            background: #fff;
+            border-color: #764ba2;
+        }
+
+        .ai-select:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 10px rgba(118, 75, 162, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -385,6 +420,16 @@
             <h1 class="game-title">RTS Game</h1>
             <p class="game-subtitle">Workers vs Fighters</p>
             <div class="menu-buttons">
+                <!-- AI Personality Selection -->
+                <div class="ai-selector">
+                    <label for="ai-personality">AI Opponent:</label>
+                    <select id="ai-personality" class="ai-select">
+                        <option value="balanced">Balanced</option>
+                        <option value="aggressive">Aggressive</option>
+                        <option value="defensive">Defensive</option>
+                        <option value="economic">Economic</option>
+                    </select>
+                </div>
                 <button class="menu-btn" id="start-game-btn">Start Game</button>
                 <button class="menu-btn" id="how-to-play-btn">How to Play</button>
             </div>
@@ -404,6 +449,13 @@
                 <ul>
                     <li><strong>Workers (Blue):</strong> Gather gold and wood</li>
                     <li><strong>Fighters (Red):</strong> Attack enemies</li>
+                </ul>
+                <h3>AI Personalities:</h3>
+                <ul>
+                    <li><strong>Balanced:</strong> Well-rounded strategy</li>
+                    <li><strong>Aggressive:</strong> Rushes with early attacks</li>
+                    <li><strong>Defensive:</strong> Builds defenses first</li>
+                    <li><strong>Economic:</strong> Focuses on resources</li>
                 </ul>
                 <button class="menu-btn" id="back-btn">Back</button>
             </div>
@@ -426,7 +478,7 @@
     }
     </script>
 
-    <!-- Cache busting: v2.0 - Geometric Shapes Version -->
-    <script type="module" src="./src/main.js?v=2.0"></script>
+    <!-- Cache busting: v3.0 - AI System Version -->
+    <script type="module" src="./src/main.js?v=3.0"></script>
 </body>
 </html>

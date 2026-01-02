@@ -1,8 +1,9 @@
 import { Game } from './core/Game.js';
 
 // VERSION CHECK - You should see this in console
-console.log('%c🎮 RTS GAME v2.0 - GEOMETRIC SHAPES VERSION 🎮', 'color: #00ff00; font-size: 20px; font-weight: bold;');
-console.log('%cIf you see this, you have the NEW version!', 'color: #ffff00; font-size: 14px;');
+console.log('%c🎮 RTS GAME v3.0 - AI SYSTEM VERSION 🎮', 'color: #00ff00; font-size: 20px; font-weight: bold;');
+console.log('%c🤖 Includes Full AI with 4 Personalities! 🤖', 'color: #00ffff; font-size: 16px; font-weight: bold;');
+console.log('%cIf you see this, you have the LATEST version!', 'color: #ffff00; font-size: 14px;');
 
 // Main entry point
 async function main() {
@@ -35,8 +36,12 @@ async function main() {
             mainMenu.classList.add('hidden');
             document.getElementById('loading-screen').style.display = 'flex';
 
-            // Create game instance
-            const game = new Game();
+            // Get selected AI personality
+            const aiPersonality = document.getElementById('ai-personality').value;
+            console.log(`Starting game with AI personality: ${aiPersonality}`);
+
+            // Create game instance with AI personality
+            const game = new Game(aiPersonality);
 
             // Initialize game
             await game.init();

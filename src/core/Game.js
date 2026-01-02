@@ -3,6 +3,7 @@ import { ResourceManager } from './ResourceManager.js';
 import { InputManager } from './InputManager.js';
 import { PathfindingSystem } from '../systems/PathfindingSystem.js';
 import { SelectionSystem } from '../systems/SelectionSystem.js';
+import { AIController } from '../systems/AIController.js';
 import { Worker } from '../entities/Worker.js';
 import { Fighter } from '../entities/Fighter.js';
 import { Building } from '../entities/Building.js';
@@ -11,7 +12,7 @@ import { Minimap } from '../ui/Minimap.js';
 import { GAME_CONSTANTS, BUILDING_TYPES } from '../utils/Constants.js';
 
 export class Game {
-    constructor() {
+    constructor(aiPersonality = 'balanced') {
         this.scene = null;
         this.camera = null;
         this.renderer = null;
@@ -23,6 +24,8 @@ export class Game {
         this.selectionSystem = null;
         this.hud = null;
         this.minimap = null;
+        this.aiController = null;
+        this.aiPersonality = aiPersonality;
 
         this.units = [];
         this.buildings = [];
@@ -79,6 +82,10 @@ export class Game {
         this.inputManager = new InputManager(this);
         this.hud = new HUD(this);
         this.minimap = new Minimap(this);
+
+        // Initialize AI controller for enemy team
+        this.aiController = new AIController(this, 1, this.aiPersonality);
+        console.log(`AI initialized with personality: ${this.aiPersonality}`);
 
         // Create initial game state
         this.setupInitialState();
@@ -235,6 +242,13 @@ export class Game {
         return resource;
     }
 
+    createBuilding(type, position, team) {
+        const building = new Building(this, type, position, team);
+        this.buildings.push(building);
+        console.log(`Building created: ${type} for team ${team}`);
+        return building;
+    }
+
     trainUnit(unitType) {
         const building = this.selectionSystem.getSelectedBuilding();
         if (!building) return;
@@ -319,6 +333,11 @@ export class Game {
     update(deltaTime) {
         // Update input
         this.inputManager.update(deltaTime);
+
+        // Update AI
+        if (this.aiController) {
+            this.aiController.update(deltaTime);
+        }
 
         // Update units
         for (const unit of this.units) {
