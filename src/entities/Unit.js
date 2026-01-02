@@ -42,24 +42,30 @@ export class Unit {
             return;
         }
 
-        // Scale the model to appropriate size (bigger than 0.01)
-        clone.scale.set(0.02, 0.02, 0.02);
+        // Scale the model to be clearly visible (much bigger)
+        clone.scale.set(1, 1, 1);
         clone.position.copy(this.position);
+        clone.position.y = 0; // Ensure on ground
 
         // Ensure model and all children are visible
         clone.visible = true;
         clone.traverse((child) => {
             child.visible = true;
+            child.frustumCulled = false; // Prevent culling issues
             if (child.isMesh) {
                 child.castShadow = true;
                 child.receiveShadow = true;
+                // Ensure materials are rendering
+                if (child.material) {
+                    child.material.needsUpdate = true;
+                }
             }
         });
 
         this.model = clone;
         this.game.scene.add(this.model);
 
-        console.log('Model created for unit:', this.type || 'Unit');
+        console.log('Model created and added to scene for unit:', this.type || 'Unit', 'at position:', this.position);
 
         // Create animation controller
         this.animationController = new AnimationController(this.model, this.game.resourceManager);

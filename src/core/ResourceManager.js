@@ -15,16 +15,15 @@ export class ResourceManager {
             this.fbxLoader.load(
                 './Meshy_AI_Character_output.fbx',
                 (fbx) => {
-                    // Make sure the base model is never visible (it's just a template)
+                    // Make sure the base model is NEVER visible or added to scene (it's just a template)
                     fbx.visible = false;
                     fbx.traverse((child) => {
-                        if (child.isMesh) {
-                            child.visible = false;
-                        }
+                        child.visible = false;
                     });
 
+                    // Important: Store it but never add to scene
                     this.loadedModels.character = fbx;
-                    console.log('Character model loaded');
+                    console.log('Character model loaded (template only, not added to scene)');
                     resolve(fbx);
                 },
                 (xhr) => {
