@@ -15,6 +15,14 @@ export class ResourceManager {
             this.fbxLoader.load(
                 './Meshy_AI_Character_output.fbx',
                 (fbx) => {
+                    // Make sure the base model is never visible (it's just a template)
+                    fbx.visible = false;
+                    fbx.traverse((child) => {
+                        if (child.isMesh) {
+                            child.visible = false;
+                        }
+                    });
+
                     this.loadedModels.character = fbx;
                     console.log('Character model loaded');
                     resolve(fbx);
@@ -119,9 +127,11 @@ export class ResourceManager {
 
         const clone = this.loadedModels.character.clone();
 
-        // Clone materials to avoid sharing
+        // Make clone visible and clone materials to avoid sharing
+        clone.visible = true;
         clone.traverse((child) => {
             if (child.isMesh) {
+                child.visible = true;
                 child.material = child.material.clone();
             }
         });
