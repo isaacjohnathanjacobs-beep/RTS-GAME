@@ -126,11 +126,14 @@ export class ResourceManager {
 
         const clone = this.loadedModels.character.clone();
 
+        let meshCount = 0;
+
         // Make clone visible and clone materials to avoid sharing
         clone.visible = true;
         clone.traverse((child) => {
             child.visible = true; // Set all children visible
             if (child.isMesh) {
+                meshCount++;
                 // Clone material to avoid sharing between instances
                 if (child.material) {
                     if (Array.isArray(child.material)) {
@@ -142,7 +145,7 @@ export class ResourceManager {
             }
         });
 
-        console.log('Character cloned successfully');
+        console.log(`Character cloned successfully - contains ${meshCount} meshes, scale:`, clone.scale);
         return clone;
     }
 

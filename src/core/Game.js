@@ -151,6 +151,13 @@ export class Game {
         loadingText.textContent = 'Loading character model...';
         await this.resourceManager.loadCharacterModel();
 
+        // Make absolutely sure the base model is NOT in the scene
+        const baseModel = this.resourceManager.getModel('character');
+        if (baseModel && baseModel.parent) {
+            baseModel.parent.remove(baseModel);
+            console.log('Removed base model from scene (if it was added)');
+        }
+
         loadingText.textContent = 'Loading animations...';
         await this.resourceManager.loadAllAnimations();
 
@@ -210,6 +217,13 @@ export class Game {
         }
 
         console.log('Initial game state created');
+
+        // Debug: Log what's in the scene
+        console.log(`Scene contains ${this.scene.children.length} objects`);
+        console.log(`Units array contains ${this.units.length} units`);
+        this.units.forEach((u, i) => {
+            console.log(`Unit ${i}: type=${u.type}, hasModel=${!!u.model}, modelVisible=${u.model?.visible}, position=`, u.position);
+        });
     }
 
     createWorker(position, team) {
