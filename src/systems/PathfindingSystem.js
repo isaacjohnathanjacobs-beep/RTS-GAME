@@ -106,6 +106,9 @@ export class PathfindingSystem {
             return null;
         }
 
+        // Reset all nodes before pathfinding to prevent stale data
+        this.resetNodes();
+
         // A* algorithm
         const openSet = [startNode];
         const closedSet = new Set();
@@ -115,7 +118,13 @@ export class PathfindingSystem {
         startNode.h = this.heuristic(startNode, endNode);
         startNode.f = startNode.h;
 
-        while (openSet.length > 0) {
+        // Add iteration limit to prevent infinite loops
+        let iterations = 0;
+        const maxIterations = 10000; // Reasonable limit for pathfinding
+
+        while (openSet.length > 0 && iterations < maxIterations) {
+            iterations++;
+
             // Find node with lowest f score
             let currentIndex = 0;
             for (let i = 1; i < openSet.length; i++) {
@@ -163,17 +172,40 @@ export class PathfindingSystem {
             }
         }
 
-        // No path found
+        // No path found or exceeded iterations
+        if (iterations >= maxIterations) {
+            console.warn('Pathfinding exceeded maximum iterations - cancelling search');
+        }
         return null;
+    }
+
+    resetNodes() {
+        // Reset all node pathfinding data to prevent stale parent references
+        for (const key in this.grid) {
+            const node = this.grid[key];
+            node.parent = null;
+            node.g = 0;
+            node.h = 0;
+            node.f = 0;
+        }
     }
 
     reconstructPath(endNode) {
         const path = [];
         let current = endNode;
+        let safetyCounter = 0;
+        const maxIterations = this.gridWidth * this.gridHeight;
 
-        while (current) {
+        // Prevent infinite loops with safety counter
+        while (current && safetyCounter < maxIterations) {
             path.unshift(this.gridToWorld({ x: current.x, z: current.z }));
             current = current.parent;
+            safetyCounter++;
+        }
+
+        if (safetyCounter >= maxIterations) {
+            console.error('Path reconstruction exceeded maximum iterations - potential infinite loop detected');
+            return null;
         }
 
         return path;

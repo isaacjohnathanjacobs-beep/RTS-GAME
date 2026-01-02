@@ -16,6 +16,7 @@ export class Fighter extends Unit {
         this.attackSpeed = GAME_CONSTANTS.FIGHTER_ATTACK_SPEED;
         this.attackCooldown = 0;
         this.targetEnemy = null;
+        this.pathRecalcCooldown = 0; // Prevent recalculating path too often
 
         this.updateHealthBar();
     }
@@ -39,6 +40,11 @@ export class Fighter extends Unit {
         // Update attack cooldown
         if (this.attackCooldown > 0) {
             this.attackCooldown -= deltaTime;
+        }
+
+        // Update path recalculation cooldown
+        if (this.pathRecalcCooldown > 0) {
+            this.pathRecalcCooldown -= deltaTime;
         }
 
         // Handle combat
@@ -72,11 +78,13 @@ export class Fighter extends Unit {
             // Out of range - move closer
             if (!this.path && !this.targetPosition) {
                 this.moveTo(this.targetEnemy.position);
-            } else if (this.targetPosition) {
-                // Update target position if enemy moved
+                this.pathRecalcCooldown = 0.5; // Wait 0.5 seconds before recalculating
+            } else if (this.targetPosition && this.pathRecalcCooldown <= 0) {
+                // Only update path if enough time has passed
                 const targetDistance = MathUtils.distance2D(this.targetPosition, this.targetEnemy.position);
-                if (targetDistance > 2) {
+                if (targetDistance > 5) { // Increased threshold to reduce recalculations
                     this.moveTo(this.targetEnemy.position);
+                    this.pathRecalcCooldown = 0.5; // Wait 0.5 seconds before recalculating
                 }
             }
         }
