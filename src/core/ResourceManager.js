@@ -130,12 +130,20 @@ export class ResourceManager {
         // Make clone visible and clone materials to avoid sharing
         clone.visible = true;
         clone.traverse((child) => {
+            child.visible = true; // Set all children visible
             if (child.isMesh) {
-                child.visible = true;
-                child.material = child.material.clone();
+                // Clone material to avoid sharing between instances
+                if (child.material) {
+                    if (Array.isArray(child.material)) {
+                        child.material = child.material.map(m => m.clone());
+                    } else {
+                        child.material = child.material.clone();
+                    }
+                }
             }
         });
 
+        console.log('Character cloned successfully');
         return clone;
     }
 

@@ -37,14 +37,29 @@ export class Unit {
 
     createModel() {
         const clone = this.game.resourceManager.cloneCharacter();
-        if (!clone) return;
+        if (!clone) {
+            console.error('Failed to clone character model');
+            return;
+        }
 
-        // Scale down the model
-        clone.scale.set(0.01, 0.01, 0.01);
+        // Scale the model to appropriate size (bigger than 0.01)
+        clone.scale.set(0.02, 0.02, 0.02);
         clone.position.copy(this.position);
+
+        // Ensure model and all children are visible
+        clone.visible = true;
+        clone.traverse((child) => {
+            child.visible = true;
+            if (child.isMesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+            }
+        });
 
         this.model = clone;
         this.game.scene.add(this.model);
+
+        console.log('Model created for unit:', this.type || 'Unit');
 
         // Create animation controller
         this.animationController = new AnimationController(this.model, this.game.resourceManager);
