@@ -21,6 +21,11 @@ export class Fighter extends Unit {
         this.updateHealthBar();
     }
 
+    getUnitColor() {
+        // Fighters are red (player) or dark red (enemy)
+        return this.team === 0 ? 0xff3333 : 0xcc0000;
+    }
+
     setCommand(command, target = null) {
         super.setCommand(command, target);
 

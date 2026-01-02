@@ -19,6 +19,11 @@ export class Worker extends Unit {
         this.updateHealthBar();
     }
 
+    getUnitColor() {
+        // Workers are blue (player) or light red (enemy)
+        return this.team === 0 ? 0x3399ff : 0xff6666;
+    }
+
     setCommand(command, target = null) {
         super.setCommand(command, target);
 

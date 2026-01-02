@@ -148,23 +148,14 @@ export class Game {
     async loadResources() {
         const loadingText = document.getElementById('loading-text');
 
-        loadingText.textContent = 'Loading character model...';
-        await this.resourceManager.loadCharacterModel();
+        // Skip FBX loading - we're using simple geometric shapes now
+        loadingText.textContent = 'Preparing game assets...';
 
-        // Make absolutely sure the base model is NOT in the scene
-        const baseModel = this.resourceManager.getModel('character');
-        if (baseModel && baseModel.parent) {
-            baseModel.parent.remove(baseModel);
-            console.log('Removed base model from scene (if it was added)');
-        }
-
-        loadingText.textContent = 'Loading animations...';
-        await this.resourceManager.loadAllAnimations();
-
-        loadingText.textContent = 'Loading textures...';
-        await this.resourceManager.loadTextures();
+        // Small delay for visual feedback
+        await new Promise(resolve => setTimeout(resolve, 500));
 
         loadingText.textContent = 'Ready!';
+        console.log('Using simple geometric shapes for units - no FBX loading required');
     }
 
     setupInitialState() {

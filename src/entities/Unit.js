@@ -36,39 +36,60 @@ export class Unit {
     }
 
     createModel() {
-        const clone = this.game.resourceManager.cloneCharacter();
-        if (!clone) {
-            console.error('Failed to clone character model');
-            return;
-        }
+        // Create a simple geometric shape for the unit
+        const group = new THREE.Group();
 
-        // Scale the model to be clearly visible (much bigger)
-        clone.scale.set(1, 1, 1);
-        clone.position.copy(this.position);
-        clone.position.y = 0; // Ensure on ground
-
-        // Ensure model and all children are visible
-        clone.visible = true;
-        clone.traverse((child) => {
-            child.visible = true;
-            child.frustumCulled = false; // Prevent culling issues
-            if (child.isMesh) {
-                child.castShadow = true;
-                child.receiveShadow = true;
-                // Ensure materials are rendering
-                if (child.material) {
-                    child.material.needsUpdate = true;
-                }
-            }
+        // Body - capsule shape (cylinder with spheres on top/bottom)
+        const bodyGeometry = new THREE.CylinderGeometry(0.4, 0.4, 1.5, 8);
+        const bodyMaterial = new THREE.MeshStandardMaterial({
+            color: this.getUnitColor(),
+            roughness: 0.7,
+            metalness: 0.3,
         });
+        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+        body.position.y = 0.75;
+        body.castShadow = true;
+        body.receiveShadow = true;
+        group.add(body);
 
-        this.model = clone;
+        // Head
+        const headGeometry = new THREE.SphereGeometry(0.3, 8, 8);
+        const headMaterial = new THREE.MeshStandardMaterial({
+            color: this.getUnitColor(),
+            roughness: 0.6,
+            metalness: 0.2,
+        });
+        const head = new THREE.Mesh(headGeometry, headMaterial);
+        head.position.y = 1.8;
+        head.castShadow = true;
+        head.receiveShadow = true;
+        group.add(head);
+
+        group.position.copy(this.position);
+        this.model = group;
+        this.bodyMesh = body; // Store reference for animations
         this.game.scene.add(this.model);
 
-        console.log('Model created and added to scene for unit:', this.type || 'Unit', 'at position:', this.position);
+        console.log('Simple model created for unit:', this.type || 'Unit');
 
-        // Create animation controller
-        this.animationController = new AnimationController(this.model, this.game.resourceManager);
+        // Simple rotation animation instead of complex FBX animations
+        this.animationController = {
+            setState: (state) => { this.currentAnimState = state; },
+            update: (deltaTime) => {
+                // Idle bob animation
+                if (this.currentAnimState === ANIMATION_STATES.IDLE && this.bodyMesh) {
+                    this.bodyMesh.position.y = 0.75 + Math.sin(Date.now() * 0.003) * 0.05;
+                }
+            },
+            getState: () => this.currentAnimState,
+            dispose: () => {}
+        };
+        this.currentAnimState = ANIMATION_STATES.IDLE;
+    }
+
+    getUnitColor() {
+        // Default color (will be overridden by Worker/Fighter)
+        return this.team === 0 ? 0x4444ff : 0xff4444;
     }
 
     createSelectionRing() {

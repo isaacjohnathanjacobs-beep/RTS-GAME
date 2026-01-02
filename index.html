@@ -223,6 +223,108 @@
             font-size: 16px;
             color: #aaa;
         }
+
+        /* Main Menu */
+        #main-menu {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        #main-menu.hidden {
+            display: none;
+        }
+
+        .menu-container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            border: 3px solid #fff;
+            max-width: 600px;
+        }
+
+        .game-title {
+            font-size: 64px;
+            color: #fff;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+        }
+
+        .game-subtitle {
+            font-size: 24px;
+            color: #aaa;
+            margin-bottom: 40px;
+        }
+
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .menu-btn {
+            padding: 15px 60px;
+            font-size: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .menu-btn:active {
+            transform: translateY(0);
+        }
+
+        .instructions {
+            margin-top: 30px;
+            text-align: left;
+            color: #fff;
+        }
+
+        .instructions.hidden {
+            display: none;
+        }
+
+        .instructions h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .instructions h3 {
+            font-size: 20px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #ccc;
+        }
+
+        .instructions ul {
+            list-style-position: inside;
+            margin-bottom: 15px;
+        }
+
+        .instructions li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
@@ -277,8 +379,39 @@
         <div id="selection-box"></div>
     </div>
 
+    <!-- Main Menu -->
+    <div id="main-menu">
+        <div class="menu-container">
+            <h1 class="game-title">RTS Game</h1>
+            <p class="game-subtitle">Workers vs Fighters</p>
+            <div class="menu-buttons">
+                <button class="menu-btn" id="start-game-btn">Start Game</button>
+                <button class="menu-btn" id="how-to-play-btn">How to Play</button>
+            </div>
+            <div id="instructions" class="instructions hidden">
+                <h2>How to Play</h2>
+                <p><strong>Objective:</strong> Gather resources, build an army, and defeat your enemies!</p>
+                <h3>Controls:</h3>
+                <ul>
+                    <li><strong>Left Click:</strong> Select units/buildings</li>
+                    <li><strong>Right Click:</strong> Move/Attack/Gather</li>
+                    <li><strong>Drag:</strong> Box select multiple units</li>
+                    <li><strong>WASD:</strong> Move camera</li>
+                    <li><strong>Mouse Wheel:</strong> Zoom</li>
+                    <li><strong>Spacebar:</strong> Select idle workers</li>
+                </ul>
+                <h3>Units:</h3>
+                <ul>
+                    <li><strong>Workers (Blue):</strong> Gather gold and wood</li>
+                    <li><strong>Fighters (Red):</strong> Attack enemies</li>
+                </ul>
+                <button class="menu-btn" id="back-btn">Back</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Loading Screen -->
-    <div id="loading-screen">
+    <div id="loading-screen" style="display: none;">
         <div class="loading-spinner"></div>
         <div>Loading RTS Game...</div>
         <div id="loading-text">Initializing...</div>
