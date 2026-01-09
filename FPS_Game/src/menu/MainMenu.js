@@ -14,7 +14,7 @@ export default class MainMenu {
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, #1a0a2e 0%, #4b0082 50%, #6a0dad 100%);
             display: none;
             justify-content: center;
             align-items: center;
@@ -25,18 +25,31 @@ export default class MainMenu {
         const menuContent = document.createElement('div');
         menuContent.style.cssText = `
             text-align: center;
-            color: white;
+            color: #e0d0ff;
         `;
 
         const title = document.createElement('h1');
-        title.textContent = 'THIRD PERSON FPS';
+        title.textContent = 'ARCANE BATTLEGROUNDS';
         title.style.cssText = `
             font-size: 72px;
-            margin-bottom: 50px;
-            text-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(147, 112, 219, 0.8), 4px 4px 8px rgba(0,0,0,0.5);
             font-weight: bold;
-            letter-spacing: 4px;
+            letter-spacing: 6px;
+            font-family: Georgia, serif;
         `;
+
+        const subtitle = document.createElement('div');
+        subtitle.textContent = '✨ Master the Elements ✨';
+        subtitle.style.cssText = `
+            font-size: 24px;
+            margin-bottom: 40px;
+            color: #c8b4e0;
+            font-style: italic;
+            text-shadow: 0 0 10px rgba(147, 112, 219, 0.6);
+        `;
+
+        menuContent.appendChild(subtitle);
 
         const buttonContainer = document.createElement('div');
         buttonContainer.style.cssText = `
@@ -48,15 +61,17 @@ export default class MainMenu {
         const buttonStyle = `
             padding: 20px 60px;
             font-size: 24px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 3px solid rgba(255, 255, 255, 0.8);
-            color: white;
+            background: rgba(75, 0, 130, 0.3);
+            border: 3px solid rgba(147, 112, 219, 0.8);
+            color: #e0d0ff;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: bold;
             letter-spacing: 2px;
             text-transform: uppercase;
             backdrop-filter: blur(10px);
+            box-shadow: 0 0 15px rgba(147, 112, 219, 0.4);
+            font-family: Georgia, serif;
         `;
 
         const singlePlayerBtn = this.createButton('Single Player', buttonStyle);
@@ -92,15 +107,17 @@ export default class MainMenu {
         button.style.cssText = style;
 
         button.addEventListener('mouseenter', () => {
-            button.style.background = 'rgba(255, 255, 255, 0.3)';
+            button.style.background = 'rgba(147, 112, 219, 0.5)';
             button.style.transform = 'scale(1.05)';
-            button.style.borderColor = 'rgba(255, 255, 255, 1)';
+            button.style.borderColor = 'rgba(186, 85, 211, 1)';
+            button.style.boxShadow = '0 0 25px rgba(147, 112, 219, 0.8)';
         });
 
         button.addEventListener('mouseleave', () => {
-            button.style.background = 'rgba(255, 255, 255, 0.1)';
+            button.style.background = 'rgba(75, 0, 130, 0.3)';
             button.style.transform = 'scale(1)';
-            button.style.borderColor = 'rgba(255, 255, 255, 0.8)';
+            button.style.borderColor = 'rgba(147, 112, 219, 0.8)';
+            button.style.boxShadow = '0 0 15px rgba(147, 112, 219, 0.4)';
         });
 
         return button;

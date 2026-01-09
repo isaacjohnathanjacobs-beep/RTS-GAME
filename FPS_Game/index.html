@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Third Person FPS Game</title>
+    <title>Arcane Battlegrounds - Magic FPS</title>
     <style>
         * {
             margin: 0;
@@ -11,7 +11,7 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Georgia', serif;
             overflow: hidden;
             background: #000;
         }
@@ -33,45 +33,87 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 20px;
-            height: 20px;
+            width: 30px;
+            height: 30px;
             display: none;
+            border: 2px solid rgba(147, 112, 219, 0.8);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(147, 112, 219, 0.6);
         }
         #crosshair::before,
         #crosshair::after {
             content: '';
             position: absolute;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(147, 112, 219, 0.9);
+            box-shadow: 0 0 5px rgba(147, 112, 219, 0.8);
         }
         #crosshair::before {
             width: 2px;
-            height: 100%;
+            height: 12px;
             left: 50%;
-            transform: translateX(-50%);
+            top: 50%;
+            transform: translate(-50%, -50%);
         }
         #crosshair::after {
-            width: 100%;
+            width: 12px;
             height: 2px;
+            left: 50%;
             top: 50%;
-            transform: translateY(-50%);
+            transform: translate(-50%, -50%);
         }
         #hud {
             position: absolute;
             bottom: 20px;
             left: 20px;
-            color: white;
-            font-size: 18px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            color: #e0d0ff;
+            font-size: 20px;
+            text-shadow: 0 0 10px rgba(147, 112, 219, 0.8), 2px 2px 4px rgba(0,0,0,0.8);
             display: none;
+            font-weight: bold;
+        }
+        #hud > div {
+            margin: 8px 0;
+            padding: 8px 12px;
+            background: rgba(75, 0, 130, 0.3);
+            border-left: 3px solid #9370db;
+            border-radius: 4px;
+        }
+        #spellBar {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+        }
+        #spellBar .spell-info {
+            background: rgba(75, 0, 130, 0.4);
+            border: 2px solid #9370db;
+            border-radius: 8px;
+            padding: 15px;
+            color: #e0d0ff;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(147, 112, 219, 0.5);
+        }
+        #spellBar .spell-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(147, 112, 219, 1);
+        }
+        #spellBar .spell-hint {
+            font-size: 12px;
+            color: #c8b4e0;
+            margin-top: 5px;
         }
         #loading {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: white;
-            font-size: 24px;
+            color: #e0d0ff;
+            font-size: 28px;
             text-align: center;
+            text-shadow: 0 0 20px rgba(147, 112, 219, 0.8);
+            font-weight: bold;
         }
     </style>
 </head>
@@ -80,10 +122,16 @@
     <div id="ui">
         <div id="crosshair"></div>
         <div id="hud">
-            <div>Health: <span id="health">100</span></div>
-            <div>Ammo: <span id="ammo">30/90</span></div>
+            <div>❤️ Health: <span id="health">100</span></div>
+            <div>✨ Mana: <span id="mana">100/100</span></div>
         </div>
-        <div id="loading">Loading Game Assets...</div>
+        <div id="spellBar">
+            <div class="spell-info">
+                <div class="spell-name" id="currentSpell">Fireball</div>
+                <div class="spell-hint">Q/E or 1-5 to switch spells</div>
+            </div>
+        </div>
+        <div id="loading">Loading Arcane Powers...</div>
     </div>
     <script type="module" src="/src/main.js"></script>
 </body>

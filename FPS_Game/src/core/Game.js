@@ -63,13 +63,16 @@ export default class Game {
 
     setupScene() {
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x87ceeb);
-        this.scene.fog = new THREE.Fog(0x87ceeb, 100, 500);
+        // Mystical purple-blue gradient sky
+        this.scene.background = new THREE.Color(0x1a0a2e);
+        this.scene.fog = new THREE.Fog(0x2d1b4e, 50, 400);
 
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        // Mystical purple ambient light
+        const ambientLight = new THREE.AmbientLight(0x9370db, 0.5);
         this.scene.add(ambientLight);
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        // Moonlight effect
+        const directionalLight = new THREE.DirectionalLight(0xb19cd9, 0.7);
         directionalLight.position.set(50, 100, 50);
         directionalLight.castShadow = true;
         directionalLight.shadow.mapSize.width = 2048;

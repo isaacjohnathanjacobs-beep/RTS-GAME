@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { io } from 'socket.io-client';
 import Player from '../gameplay/Player.js';
+import SpellSystem from '../utils/SpellSystem.js';
 
 export default class Multiplayer {
     constructor(game) {
@@ -76,6 +77,7 @@ export default class Multiplayer {
 
         document.getElementById('crosshair').style.display = 'block';
         document.getElementById('hud').style.display = 'block';
+        document.getElementById('spellBar').style.display = 'block';
 
         this.game.inputManager.requestPointerLock();
 
@@ -95,10 +97,14 @@ export default class Multiplayer {
     }
 
     setupEnvironment() {
+        // Mystical ground
         const groundGeometry = new THREE.PlaneGeometry(200, 200);
         const groundMaterial = new THREE.MeshStandardMaterial({
-            color: 0x4a7c3e,
-            roughness: 0.8
+            color: 0x2d1b4e,
+            roughness: 0.8,
+            metalness: 0.2,
+            emissive: 0x4b0082,
+            emissiveIntensity: 0.1
         });
         const ground = new THREE.Mesh(groundGeometry, groundMaterial);
         ground.rotation.x = -Math.PI / 2;
@@ -206,22 +212,21 @@ export default class Multiplayer {
     }
 
     handleOtherPlayerShot(data) {
-        console.log('Other player shot:', data);
+        console.log('Other player cast spell:', data);
 
-        const bulletGeometry = new THREE.SphereGeometry(0.1, 8, 8);
-        const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-        const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
-
-        bullet.position.set(data.position.x, data.position.y, data.position.z);
-
+        const spellType = data.spellType || 'fireball';
         const direction = new THREE.Vector3(data.direction.x, data.direction.y, data.direction.z);
-        bullet.userData.velocity = direction.multiplyScalar(50);
-        bullet.userData.lifetime = 3;
+        const position = new THREE.Vector3(data.position.x, data.position.y, data.position.z);
 
-        this.game.scene.add(bullet);
+        const spell = SpellSystem.createSpellProjectile(
+            this.game.scene,
+            spellType,
+            position,
+            direction
+        );
 
-        if (!this.game.bullets) this.game.bullets = [];
-        this.game.bullets.push(bullet);
+        if (!this.game.spells) this.game.spells = [];
+        this.game.spells.push(spell);
     }
 
     update(deltaTime) {
@@ -246,25 +251,24 @@ export default class Multiplayer {
             }
         }
 
-        this.updateBullets(deltaTime);
+        this.updateSpells(deltaTime);
 
         if (this.player && this.player.health <= 0) {
             this.respawn();
         }
     }
 
-    updateBullets(deltaTime) {
-        if (!this.game.bullets) return;
+    updateSpells(deltaTime) {
+        if (!this.game.spells) return;
 
-        for (let i = this.game.bullets.length - 1; i >= 0; i--) {
-            const bullet = this.game.bullets[i];
+        for (let i = this.game.spells.length - 1; i >= 0; i--) {
+            const spell = this.game.spells[i];
 
-            bullet.position.add(bullet.userData.velocity.clone().multiplyScalar(deltaTime));
-            bullet.userData.lifetime -= deltaTime;
+            const stillAlive = SpellSystem.updateSpellProjectile(spell, deltaTime, this.game.scene);
 
-            if (bullet.userData.lifetime <= 0) {
-                this.game.scene.remove(bullet);
-                this.game.bullets.splice(i, 1);
+            if (!stillAlive) {
+                this.game.scene.remove(spell);
+                this.game.spells.splice(i, 1);
             }
         }
     }
@@ -274,7 +278,7 @@ export default class Multiplayer {
         const spawnZ = Math.random() * 20 - 10;
         this.player.position.set(spawnX, 0, spawnZ);
         this.player.health = this.player.maxHealth;
-        this.player.ammo = this.player.maxAmmo;
+        this.player.mana = this.player.maxMana;
     }
 
     cleanup() {
@@ -300,11 +304,13 @@ export default class Multiplayer {
             this.game.scene.remove(object);
         }
 
-        if (this.game.bullets) {
-            this.game.bullets = [];
+        if (this.game.spells) {
+            this.game.spells.forEach(spell => this.game.scene.remove(spell));
+            this.game.spells = [];
         }
 
         document.getElementById('crosshair').style.display = 'none';
         document.getElementById('hud').style.display = 'none';
+        document.getElementById('spellBar').style.display = 'none';
     }
 }

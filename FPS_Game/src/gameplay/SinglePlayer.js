@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import Player from './Player.js';
 import Enemy from './Enemy.js';
+import SpellSystem from '../utils/SpellSystem.js';
 
 export default class SinglePlayer {
     constructor(game) {
@@ -21,6 +22,7 @@ export default class SinglePlayer {
 
         document.getElementById('crosshair').style.display = 'block';
         document.getElementById('hud').style.display = 'block';
+        document.getElementById('spellBar').style.display = 'block';
 
         this.game.inputManager.requestPointerLock();
     }
@@ -31,10 +33,14 @@ export default class SinglePlayer {
     }
 
     setupEnvironment() {
+        // Create mystical ground with purple hue
         const groundGeometry = new THREE.PlaneGeometry(200, 200);
         const groundMaterial = new THREE.MeshStandardMaterial({
-            color: 0x4a7c3e,
-            roughness: 0.8
+            color: 0x2d1b4e,
+            roughness: 0.8,
+            metalness: 0.2,
+            emissive: 0x4b0082,
+            emissiveIntensity: 0.1
         });
         const ground = new THREE.Mesh(groundGeometry, groundMaterial);
         ground.rotation.x = -Math.PI / 2;
@@ -136,7 +142,7 @@ export default class SinglePlayer {
             }
         }
 
-        this.updateBullets(deltaTime);
+        this.updateSpells(deltaTime);
 
         if (this.enemies.length === 0) {
             this.wave++;
@@ -149,29 +155,60 @@ export default class SinglePlayer {
         }
     }
 
-    updateBullets(deltaTime) {
-        if (!this.game.bullets) return;
+    updateSpells(deltaTime) {
+        if (!this.game.spells) return;
 
-        for (let i = this.game.bullets.length - 1; i >= 0; i--) {
-            const bullet = this.game.bullets[i];
+        for (let i = this.game.spells.length - 1; i >= 0; i--) {
+            const spell = this.game.spells[i];
 
-            bullet.position.add(bullet.userData.velocity.clone().multiplyScalar(deltaTime));
-            bullet.userData.lifetime -= deltaTime;
+            // Update spell position and effects
+            const stillAlive = SpellSystem.updateSpellProjectile(spell, deltaTime, this.game.scene);
 
-            if (bullet.userData.lifetime <= 0) {
-                this.game.scene.remove(bullet);
-                this.game.bullets.splice(i, 1);
+            if (!stillAlive) {
+                this.game.scene.remove(spell);
+                this.game.spells.splice(i, 1);
                 continue;
             }
 
+            // Check collision with enemies
             for (let j = 0; j < this.enemies.length; j++) {
                 const enemy = this.enemies[j];
-                const distance = bullet.position.distanceTo(enemy.position);
+                const distance = spell.position.distanceTo(enemy.position);
 
-                if (distance < 1) {
-                    enemy.takeDamage(25);
-                    this.game.scene.remove(bullet);
-                    this.game.bullets.splice(i, 1);
+                if (distance < 1.5) {
+                    // Apply spell damage and effects
+                    SpellSystem.applySpellEffect(enemy, spell.userData.spellType, spell.userData.damage);
+
+                    // Create explosion effect
+                    const explosion = SpellSystem.createExplosionEffect(
+                        this.game.scene,
+                        spell.position,
+                        spell.userData.spellType
+                    );
+
+                    if (explosion) {
+                        setTimeout(() => {
+                            this.game.scene.remove(explosion);
+                        }, 300);
+                    }
+
+                    // Create particles
+                    const particles = SpellSystem.createSpellParticles(
+                        this.game.scene,
+                        spell.position,
+                        spell.userData.spellType
+                    );
+
+                    if (particles) {
+                        particles.forEach((particle, idx) => {
+                            setTimeout(() => {
+                                this.game.scene.remove(particle);
+                            }, particle.userData.lifetime * 1000);
+                        });
+                    }
+
+                    this.game.scene.remove(spell);
+                    this.game.spells.splice(i, 1);
                     break;
                 }
             }
@@ -207,8 +244,9 @@ export default class SinglePlayer {
             this.game.scene.remove(object);
         }
 
-        if (this.game.bullets) {
-            this.game.bullets = [];
+        if (this.game.spells) {
+            this.game.spells.forEach(spell => this.game.scene.remove(spell));
+            this.game.spells = [];
         }
 
         this.wave = 1;
@@ -216,5 +254,6 @@ export default class SinglePlayer {
 
         document.getElementById('crosshair').style.display = 'none';
         document.getElementById('hud').style.display = 'none';
+        document.getElementById('spellBar').style.display = 'none';
     }
 }
