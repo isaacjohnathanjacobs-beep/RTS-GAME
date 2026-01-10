@@ -43,7 +43,7 @@ export default class MainMenu {
         subtitle.textContent = '✨ Master the Elements ✨';
         subtitle.style.cssText = `
             font-size: 24px;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
             color: #c8b4e0;
             font-style: italic;
             text-shadow: 0 0 10px rgba(147, 112, 219, 0.6);
@@ -55,12 +55,28 @@ export default class MainMenu {
         buttonContainer.style.cssText = `
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 25px;
+        `;
+
+        const startButtonStyle = `
+            padding: 25px 80px;
+            font-size: 32px;
+            background: rgba(147, 112, 219, 0.5);
+            border: 4px solid rgba(186, 85, 211, 0.9);
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 25px rgba(147, 112, 219, 0.6);
+            font-family: Georgia, serif;
         `;
 
         const buttonStyle = `
-            padding: 20px 60px;
-            font-size: 24px;
+            padding: 15px 50px;
+            font-size: 20px;
             background: rgba(75, 0, 130, 0.3);
             border: 3px solid rgba(147, 112, 219, 0.8);
             color: #e0d0ff;
@@ -74,26 +90,28 @@ export default class MainMenu {
             font-family: Georgia, serif;
         `;
 
-        const singlePlayerBtn = this.createButton('Single Player', buttonStyle);
-        singlePlayerBtn.addEventListener('click', () => this.startSinglePlayer());
-
-        const multiplayerBtn = this.createButton('Multiplayer', buttonStyle);
-        multiplayerBtn.addEventListener('click', () => this.startMultiplayer());
+        const startBtn = this.createButton('⚡ START GAME ⚡', startButtonStyle);
+        startBtn.addEventListener('click', () => this.startSinglePlayer());
+        startBtn.addEventListener('mouseenter', () => {
+            startBtn.style.background = 'rgba(186, 85, 211, 0.7)';
+            startBtn.style.transform = 'scale(1.08)';
+            startBtn.style.boxShadow = '0 0 35px rgba(186, 85, 211, 1)';
+        });
+        startBtn.addEventListener('mouseleave', () => {
+            startBtn.style.background = 'rgba(147, 112, 219, 0.5)';
+            startBtn.style.transform = 'scale(1)';
+            startBtn.style.boxShadow = '0 0 25px rgba(147, 112, 219, 0.6)';
+        });
 
         const mapEditorBtn = this.createButton('Map Editor', buttonStyle);
         mapEditorBtn.addEventListener('click', () => this.startMapEditor());
 
-        const settingsBtn = this.createButton('Settings', buttonStyle);
-        settingsBtn.addEventListener('click', () => this.openSettings());
+        const instructionsBtn = this.createButton('How to Play', buttonStyle);
+        instructionsBtn.addEventListener('click', () => this.showInstructions());
 
-        const exitBtn = this.createButton('Exit', buttonStyle);
-        exitBtn.addEventListener('click', () => this.exit());
-
-        buttonContainer.appendChild(singlePlayerBtn);
-        buttonContainer.appendChild(multiplayerBtn);
+        buttonContainer.appendChild(startBtn);
         buttonContainer.appendChild(mapEditorBtn);
-        buttonContainer.appendChild(settingsBtn);
-        buttonContainer.appendChild(exitBtn);
+        buttonContainer.appendChild(instructionsBtn);
 
         menuContent.appendChild(title);
         menuContent.appendChild(buttonContainer);
@@ -128,12 +146,12 @@ export default class MainMenu {
         this.game.setState('singlePlayer');
     }
 
-    startMultiplayer() {
-        console.log('Starting Multiplayer...');
-        this.showMultiplayerOptions();
+    startMapEditor() {
+        console.log('Starting Map Editor...');
+        this.game.setState('mapEditor');
     }
 
-    showMultiplayerOptions() {
+    showInstructions() {
         const overlay = document.createElement('div');
         overlay.style.cssText = `
             position: fixed;
@@ -141,95 +159,87 @@ export default class MainMenu {
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.9);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1001;
+            pointer-events: all;
         `;
 
         const dialog = document.createElement('div');
         dialog.style.cssText = `
-            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+            background: linear-gradient(135deg, #1a0a2e 0%, #4b0082 100%);
             padding: 40px;
-            border-radius: 10px;
-            border: 3px solid rgba(255,255,255,0.5);
-            text-align: center;
+            border-radius: 15px;
+            border: 3px solid rgba(147, 112, 219, 0.8);
+            text-align: left;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(147, 112, 219, 0.6);
         `;
 
         const title = document.createElement('h2');
-        title.textContent = 'Multiplayer Options';
-        title.style.cssText = 'color: white; margin-bottom: 30px; font-size: 32px;';
+        title.textContent = '🔮 How to Play';
+        title.style.cssText = `
+            color: #e0d0ff;
+            margin-bottom: 20px;
+            font-size: 32px;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(147, 112, 219, 0.8);
+        `;
 
-        const hostBtn = this.createButton('Host Game', `
-            padding: 15px 40px;
-            font-size: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.8);
+        const instructions = document.createElement('div');
+        instructions.innerHTML = `
+            <div style="color: #e0d0ff; line-height: 1.8; font-size: 16px;">
+                <h3 style="color: #ba55d3; margin-top: 15px;">⚔️ Combat</h3>
+                <p><strong>Left Click:</strong> Cast current spell</p>
+                <p><strong>Right Click:</strong> Aim/Focus</p>
+                <p><strong>1-5:</strong> Quick-select spells</p>
+                <p><strong>Q/E:</strong> Cycle through spells</p>
+
+                <h3 style="color: #ba55d3; margin-top: 15px;">🏃 Movement</h3>
+                <p><strong>W/A/S/D:</strong> Move</p>
+                <p><strong>Shift:</strong> Sprint</p>
+                <p><strong>Space:</strong> Jump</p>
+                <p><strong>Mouse:</strong> Look around</p>
+
+                <h3 style="color: #ba55d3; margin-top: 15px;">✨ Spells</h3>
+                <p><strong>Fireball (1):</strong> Balanced damage - 10 mana</p>
+                <p><strong>Ice Shard (2):</strong> Freezes enemies - 8 mana</p>
+                <p><strong>Lightning (3):</strong> High damage - 15 mana</p>
+                <p><strong>Arcane (4):</strong> Fast homing - 5 mana</p>
+                <p><strong>Shadow (5):</strong> Poison DOT - 12 mana</p>
+
+                <h3 style="color: #ba55d3; margin-top: 15px;">🎯 Objective</h3>
+                <p>Survive endless waves of corrupted mages! Each wave gets harder. Manage your mana wisely and master all five elemental spells to achieve the highest wave!</p>
+
+                <p style="margin-top: 20px; text-align: center; color: #c8b4e0;"><strong>ESC</strong> to return to menu anytime</p>
+            </div>
+        `;
+
+        const closeBtn = this.createButton('Got It!', `
+            padding: 12px 40px;
+            font-size: 18px;
+            background: rgba(147, 112, 219, 0.5);
+            border: 2px solid rgba(186, 85, 211, 0.8);
             color: white;
             cursor: pointer;
-            margin: 10px;
+            margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         `);
-        hostBtn.addEventListener('click', () => {
-            document.body.removeChild(overlay);
-            this.game.states.multiplayer.host();
-            this.game.setState('multiplayer');
-        });
-
-        const joinBtn = this.createButton('Join Game', `
-            padding: 15px 40px;
-            font-size: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.8);
-            color: white;
-            cursor: pointer;
-            margin: 10px;
-        `);
-        joinBtn.addEventListener('click', () => {
-            const serverIP = prompt('Enter server IP:', 'localhost:3001');
-            if (serverIP) {
-                document.body.removeChild(overlay);
-                this.game.states.multiplayer.join(serverIP);
-                this.game.setState('multiplayer');
-            }
-        });
-
-        const cancelBtn = this.createButton('Cancel', `
-            padding: 15px 40px;
-            font-size: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.8);
-            color: white;
-            cursor: pointer;
-            margin: 10px;
-        `);
-        cancelBtn.addEventListener('click', () => {
+        closeBtn.addEventListener('click', () => {
             document.body.removeChild(overlay);
         });
 
         dialog.appendChild(title);
-        dialog.appendChild(hostBtn);
-        dialog.appendChild(document.createElement('br'));
-        dialog.appendChild(joinBtn);
-        dialog.appendChild(document.createElement('br'));
-        dialog.appendChild(cancelBtn);
+        dialog.appendChild(instructions);
+        dialog.appendChild(closeBtn);
         overlay.appendChild(dialog);
         document.body.appendChild(overlay);
-    }
-
-    startMapEditor() {
-        console.log('Starting Map Editor...');
-        this.game.setState('mapEditor');
-    }
-
-    openSettings() {
-        alert('Settings menu - Coming soon!\nAdjust graphics, controls, and audio settings.');
-    }
-
-    exit() {
-        if (confirm('Are you sure you want to exit?')) {
-            window.close();
-        }
     }
 
     enter() {

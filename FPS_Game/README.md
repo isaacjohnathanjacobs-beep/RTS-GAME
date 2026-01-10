@@ -1,290 +1,196 @@
-# Arcane Battlegrounds - Magic Third Person FPS
+# Arcane Battlegrounds - Single Player Magic Combat
 
-A stunning third-person magical combat game built with Three.js, featuring spell-based combat, multiplayer battles, and a fully functional map editor.
+A stunning single-player magical combat game built with Three.js, featuring spell-based combat, wave-based survival, and a map editor.
 
-## ✨ Features
+## ✨ Quick Start
 
-- **Main Menu**: Beautiful mystical interface with multiple game modes
-- **Single Player Mode**: Wave-based survival against magical enemies
-- **Multiplayer Mode**: Real-time multiplayer spell battles using Socket.IO
-- **Map Editor**: Create and save custom battlegrounds
-- **Spell System**: 5 unique elemental spells with different effects
-- **Character Animations**: Full character animation system with 17+ animations
-- **Third Person Camera**: Dynamic camera following your sorcerer
-- **Magical Effects**: Particle systems, spell trails, and explosive impacts
-- **Mana Management**: Strategic resource system with auto-regeneration
+```bash
+cd FPS_Game
+npm install
+npm run dev
+```
+
+The game will open in your browser! Click **START GAME** to begin your magical adventure.
+
+## 🎮 Features
+
+- **Wave-Based Survival**: Battle endless waves of corrupted mages
+- **5 Elemental Spells**: Master Fire, Ice, Lightning, Arcane, and Shadow magic
+- **Mana System**: Strategic resource management with auto-regeneration
+- **Map Editor**: Create custom magical arenas
+- **Stunning Visuals**: Particle effects, spell trails, and magical atmosphere
+- **Easy to Play**: Just click Start Game and you're in!
 
 ## 🔮 Spell Arsenal
 
 ### Fireball 🔥
 - **Mana Cost**: 10
 - **Damage**: 30
-- **Effect**: Explosive impact with fire particles
-- **Speed**: Medium
-- **Best for**: Balanced damage and cost
+- **Effect**: Explosive impact
+- **Best for**: Balanced combat
 
 ### Ice Shard ❄️
 - **Mana Cost**: 8
 - **Damage**: 20
-- **Effect**: Freezes enemies, slowing their movement
-- **Speed**: Fast
+- **Effect**: Slows enemies
 - **Best for**: Crowd control
 
 ### Lightning Bolt ⚡
 - **Mana Cost**: 15
 - **Damage**: 40
-- **Effect**: Chain lightning to nearby enemies
-- **Speed**: Very Fast
-- **Best for**: High burst damage
+- **Effect**: Chain lightning
+- **Best for**: Burst damage
 
 ### Arcane Missile 🌟
 - **Mana Cost**: 5
 - **Damage**: 15
-- **Effect**: Homing capability
-- **Speed**: Fast
-- **Best for**: Rapid casting and guaranteed hits
+- **Effect**: Homing projectiles
+- **Best for**: Fast casting
 
 ### Shadow Bolt 💀
 - **Mana Cost**: 12
 - **Damage**: 35
-- **Effect**: Poison damage over time
-- **Speed**: Medium
-- **Best for**: DOT (Damage Over Time) strategies
-
-## 🎮 Installation
-
-1. Install dependencies:
-```bash
-cd FPS_Game
-npm install
-```
-
-2. Run the game:
-```bash
-npm run dev
-```
-
-3. For multiplayer, start the server in a separate terminal:
-```bash
-npm start
-```
-
-The game will open automatically in your browser at `http://localhost:3000`
-
-## 🎯 Game Modes
-
-### Single Player - Arcane Survival
-- Fight endless waves of corrupted mages
-- Enemies become stronger with each wave
-- Master all spells to maximize survival
-- Track your kills and wave progress
-
-### Multiplayer - Wizard Duel
-- **Host Arcane Arena**: Create a server for others to join
-- **Join Battle**: Connect to an existing server
-- See other wizards casting in real-time
-- Battle against friends in magical combat
-
-### Map Editor - Realm Creator
-- Create custom magical arenas
-- Place mystical objects and structures
-- Save and load realms as JSON files
-- Full camera control for precision building
+- **Effect**: Poison DOT
+- **Best for**: Sustained damage
 
 ## ⌨️ Controls
 
-### General
-- **ESC**: Return to main menu
-- **Mouse**: Look around (when pointer is locked)
-
-### Combat (Single Player / Multiplayer)
+### Movement
 - **W/A/S/D**: Move
 - **Shift**: Sprint
-- **Space**: Jump / Levitate
-- **Left Click**: Cast current spell
-- **Right Click**: Aim / Focus
-- **1-5**: Switch spells (1=Fireball, 2=Ice Shard, 3=Lightning, 4=Arcane, 5=Shadow)
-- **Q/E**: Cycle through spells
-- **Mouse Movement**: Rotate camera
+- **Space**: Jump
+- **Mouse**: Look around
 
-### Map Editor
-- **W/A/S/D**: Move camera horizontally
-- **Q/E**: Move camera up/down
-- **Mouse**: Rotate camera view
-- **Left Click**: Place selected object
-- **Right Click**: Select object
-- **Delete**: Remove selected object
+### Combat
+- **Left Click**: Cast spell
+- **Right Click**: Aim/Focus
+- **1-5**: Quick-select spells
+- **Q/E**: Cycle spells
+- **ESC**: Return to menu
+
+## 🎯 How to Play
+
+1. Click **START GAME** from the main menu
+2. Use WASD to move and mouse to aim
+3. Cast spells with Left Click
+4. Switch between 5 elemental spells (1-5 keys)
+5. Survive waves of enemies
+6. Each wave gets progressively harder
+7. Manage your mana wisely - it regenerates over time!
+
+**Goal**: Survive as many waves as possible and master all five elemental schools of magic!
+
+## 🗺️ Map Editor
+
+Create your own magical arenas:
+1. Select "Map Editor" from main menu
+2. Choose objects and place them
+3. Save your creations as JSON files
+4. Load custom maps anytime
 
 ## 📁 Project Structure
 
 ```
 FPS_Game/
 ├── assets/
-│   ├── models/          # Character models (FBX)
-│   ├── animations/      # Character animations (FBX)
+│   ├── models/          # Character models
+│   ├── animations/      # Character animations
 │   ├── textures/        # Texture maps
-│   └── maps/           # Saved map files
+│   └── maps/           # Custom maps
 ├── src/
-│   ├── core/
-│   │   ├── Game.js              # Main game engine
-│   │   └── InputManager.js     # Input handling
-│   ├── menu/
-│   │   └── MainMenu.js         # Magical main menu
-│   ├── gameplay/
-│   │   ├── Player.js           # Wizard controller
-│   │   ├── Enemy.js            # Enemy mage AI
-│   │   └── SinglePlayer.js    # Survival mode
-│   ├── multiplayer/
-│   │   └── Multiplayer.js      # Multiplayer client
-│   ├── mapeditor/
-│   │   └── MapEditor.js        # Map editor
-│   ├── utils/
-│   │   └── SpellSystem.js      # Spell mechanics
-│   └── main.js                 # Entry point
-├── server/
-│   └── index.js                # Multiplayer server
-├── index.html                   # Main HTML file
-├── package.json
-└── vite.config.js
+│   ├── core/           # Game engine
+│   ├── menu/           # Main menu
+│   ├── gameplay/       # Player, enemies, game modes
+│   ├── mapeditor/      # Map editor
+│   ├── utils/          # Spell system
+│   └── main.js
+└── index.html
 ```
 
-## 🧙‍♂️ Technical Details
+## 🧙‍♂️ Game Mechanics
 
-### Technologies Used
-- **Three.js**: 3D rendering engine
-- **Socket.IO**: Real-time multiplayer networking
-- **Vite**: Build tool and development server
-- **Express**: Multiplayer server
-- **FBX Loader**: Loading character models and animations
-
-### Spell System Features
-- Procedural particle effects
-- Dynamic lighting per spell type
-- Trail effects and glows
-- Explosion animations
-- Status effects (freeze, poison, chain)
-- Cooldown management
-- Mana cost balancing
-
-### Game Mechanics
-
-#### Mana System
+### Mana System
 - **Max Mana**: 100
-- **Regeneration**: 10 mana/second
-- **Strategic Casting**: Choose spells wisely to avoid running out
-- **Visual Feedback**: Magical aura changes color based on selected spell
+- **Regeneration**: 10/second
+- **Strategy**: Balance spell costs vs. regen
+- **Visual**: Aura color changes with equipped spell
 
-#### Animation System
-17 unique character animations:
-- Multiple idle poses
-- Walking and running
-- Sprint animations
-- Combat stances
-- Spell casting poses
-- Death animations
-- Aerial movements
+### Wave System
+- Start with 3 enemies
+- Each wave adds more enemies
+- Progressive difficulty scaling
+- Enemies get smarter and faster
 
-#### Physics System
-- Gravity simulation
-- Ground collision detection
-- Velocity-based movement
-- Jump/levitation mechanics
-
-#### AI System (Single Player)
-- Intelligent pathfinding
-- Attack range detection
-- Health system with visual indicators
-- Wave-based difficulty scaling
-- Status effect reactions
-
-#### Networking (Multiplayer)
-- WebSocket-based real-time communication
-- Player position and rotation sync
-- Animation state sharing
-- Spell projectile synchronization
-- Latency compensation
+### Spell Effects
+- **Freeze**: Slows enemy movement (Ice Shard)
+- **Poison**: Damage over time (Shadow Bolt)
+- **Chain**: Jumps to nearby enemies (Lightning)
+- **Homing**: Tracks targets (Arcane Missile)
+- **Explosion**: Area damage (Fireball)
 
 ## 🎨 Visual Features
 
 - **Mystical Environment**: Purple-tinted magical realm
-- **Dynamic Lighting**: Spell-based point lights
+- **Dynamic Lighting**: Spell-based illumination
 - **Particle Systems**: Spell trails and explosions
-- **Magical Auras**: Character glows indicating power
-- **Atmospheric Fog**: Enhances the mystical ambiance
-- **Moonlit Shadows**: Dramatic shadow casting
+- **Magical Auras**: Character glows
+- **Atmospheric Fog**: Enhanced ambiance
 
-## 🗺️ Map Editor Guide
-
-1. Enter the Map Editor from the main menu
-2. Select an object type from the dropdown
-3. Click on the ground to place mystical structures
-4. Right-click to select placed objects
-5. Press Delete to remove selected objects
-6. Save your creation as a JSON file
-7. Load previously saved realms
-
-Map files can be shared with other wizards!
-
-## 🎓 Spell Casting Tips
+## 💡 Tips & Tricks
 
 1. **Mana Management**: Don't spam expensive spells
-2. **Spell Combos**: Use Ice Shard to slow, then Lightning for damage
-3. **Positioning**: Keep moving while casting
-4. **Spell Selection**: Switch spells based on situation
-5. **Cooldowns**: Time your powerful spells carefully
+2. **Spell Combos**: Ice Shard to slow, then Lightning for damage
+3. **Movement**: Keep moving while casting
+4. **Spell Choice**: Match spells to situations
+5. **Positioning**: Use terrain and obstacles
 
-## 🌟 Future Enhancements
+## 🚀 Technologies
 
-- Additional elemental schools (Earth, Wind, Holy, Dark)
-- Ultimate abilities with long cooldowns
-- Spell upgrades and talent trees
-- Magical artifacts and power-ups
-- Larger mystical maps with varied terrain
-- Team-based arena modes
-- Custom wizard appearances
-- Sound effects and mystical music
-- Mobile/tablet support
-- Advanced AI spell-casting enemies
-- Leaderboards and achievements
-- Spell combination system
+- **Three.js**: 3D rendering
+- **Vite**: Development server
+- **FBX Loader**: 3D models
+- **Custom Spell System**: Particle effects
 
 ## 🐛 Troubleshooting
 
-**Issue**: Assets not loading
-- Ensure all FBX and texture files are in correct directories
-- Check browser console for specific errors
+**Assets not loading?**
+- Check browser console for errors
+- Ensure all files are in correct directories
 
-**Issue**: Multiplayer connection fails
-- Verify multiplayer server is running (`npm start`)
-- Check port 3001 is not blocked
-- Ensure correct server address when joining
-
-**Issue**: Spell effects lag
-- Lower number of enemies in single player
-- Reduce particle counts in SpellSystem.js
+**Performance issues?**
 - Close other browser tabs
+- Lower enemy counts in code
+- Reduce particle counts
 
-**Issue**: Mana not regenerating
-- Check console for errors
-- Verify you're not at max mana
-- Restart the game mode
+**Game won't start?**
+- Run `npm install` first
+- Make sure you're in the FPS_Game directory
+- Check Node.js is installed
 
 ## 📜 Lore
 
-In the Arcane Battlegrounds, powerful mages battle for supremacy over the mystical realm. Master five schools of magic - Fire, Ice, Lightning, Arcane, and Shadow - to prove yourself as the ultimate sorcerer. Face waves of corrupted wizards in single combat, or challenge other players in the arena. Only those who master the elements will survive!
+In the Arcane Battlegrounds, you stand as the last guardian against waves of corrupted mages seeking to destroy the mystical realm. Master five schools of elemental magic - Fire, Ice, Lightning, Arcane, and Shadow - to defend against the endless corruption. Only those who truly master the elements will survive!
 
-## 🎮 Credits
+## 🎓 Advanced Tactics
 
-- Character models and animations: Meshy AI
-- Game engine: Three.js
-- Networking: Socket.IO
-- Spell system design: Custom implementation
-- Visual effects: Procedural particle systems
+- **Kiting**: Move while casting to maintain distance
+- **Resource Management**: Save mana for critical moments
+- **Spell Rotation**: Use cheap spells to maintain pressure
+- **Crowd Control**: Freeze groups before bursting them down
+- **DOT Management**: Apply Shadow Bolt early for sustained damage
+
+## 🏆 Achievements (Unofficial)
+
+- **Apprentice**: Reach Wave 5
+- **Mage**: Reach Wave 10
+- **Archmage**: Reach Wave 15
+- **Grand Wizard**: Reach Wave 20
+- **Elemental Master**: Master all 5 spell types
 
 ## 📄 License
 
-This project is for educational and demonstration purposes.
+Educational and demonstration purposes.
 
 ---
 
-**Master the elements. Command the battlefield. Become the Arcane Champion!** ✨🔮⚡
+**Ready to master the elements? Click START GAME and begin your magical journey!** ✨🔮⚡
