@@ -3,6 +3,9 @@
 #SingleInstance Force
 SetWorkingDir %A_ScriptDir%
 
+; Variable to store the last active window
+LastActiveWindow := 0
+
 ; Create a GUI with a draggable button
 Gui, +AlwaysOnTop -Caption +ToolWindow
 Gui, Color, 0x1E1E1E
@@ -13,13 +16,31 @@ Gui, Show, x100 y100 w120 h60, Draggable Button
 ; Make the GUI draggable
 OnMessage(0x201, "WM_LBUTTONDOWN")
 
+; Timer to track the last active window (runs every 200ms)
+SetTimer, TrackActiveWindow, 200
+return
+
+; Track the last active window that isn't the GUI
+TrackActiveWindow:
+    WinGet, CurrentWindow, ID, A
+    WinGetTitle, CurrentTitle, ahk_id %CurrentWindow%
+    if (CurrentTitle != "Draggable Button") {
+        LastActiveWindow := CurrentWindow
+    }
 return
 
 ; Function to handle button click
 ButtonClick:
-    ; Send F12 to open browser developer console
-    ; FN+F12 on most laptops = F12 key
-    Send {F12}
+    global LastActiveWindow
+    ; Activate the last active window and send F12 to it
+    if (LastActiveWindow != 0) {
+        WinActivate, ahk_id %LastActiveWindow%
+        Sleep, 50  ; Small delay to ensure window is activated
+        Send {F12}
+    } else {
+        ; Fallback: just send F12
+        Send {F12}
+    }
 return
 
 ; Function to make window draggable
