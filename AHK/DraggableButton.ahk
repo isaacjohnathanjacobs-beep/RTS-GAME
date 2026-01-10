@@ -17,9 +17,9 @@ return
 
 ; Function to handle button click
 ButtonClick:
-    ; FN+F12 on Windows opens the Connect panel (Win+K)
-    ; This is for connecting to wireless displays and audio devices
-    Send #k  ; Win + K
+    ; Send F12 to open browser developer console
+    ; FN+F12 on most laptops = F12 key
+    Send {F12}
 return
 
 ; Function to make window draggable
