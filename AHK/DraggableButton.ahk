@@ -17,9 +17,9 @@ return
 
 ; Function to handle button click
 ButtonClick:
-    ; Send F12 key (FN is typically a hardware key that modifies function keys)
-    ; On most systems, FN+F12 is just F12 or a special function
-    Send {F12}
+    ; FN+F12 on Windows opens the Connect panel (Win+K)
+    ; This is for connecting to wireless displays and audio devices
+    Send #k  ; Win + K
 return
 
 ; Function to make window draggable
